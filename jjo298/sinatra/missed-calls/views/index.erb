@@ -1,0 +1,41 @@
+<html>
+<head>
+<title>AGI to Ajax Demo</title>
+<script type="text/javascript">
+
+function startLoop(){
+//check every 1 second
+setInterval("loadCallData()", 1000);
+}
+
+function loadCallData() {
+if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+xmlhttp=new XMLHttpRequest();
+} else {// code for IE6, IE5
+xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+}
+//get caller ID
+xmlhttp.open("GET",'missed-calls/digitinfo',false);
+xmlhttp.send(null);
+var call_dig = xmlhttp.responseText.split(",");
+document.getElementById('callerID').innerHTML=call_dig[0];
+document.getElementById('button').innerHTML=call_dig[1];
+}
+
+</script>
+</head>
+
+<body onload="startLoop();">
+<h3>Call x10:</h3>
+
+Caller:
+<div id="callerID">
+none.
+</div>
+<br>
+Button:
+<div id="button">
+none.
+</div>
+</body>
+</html>

@@ -1,0 +1,4 @@
+PassengerEnabled on
+RackBaseURI /sinatra
+PassengerAppRoot /home/jjo298/sinatra/missed-calls
+RackEnv development

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Form with Different Fields Example</title>
+    <style type="text/css">
+      body {
+        width: 820px;
+      }
+      h1 {
+        color: #555;
+        border-bottom: 1px solid #ccc;
+      }
+      p {
+        color: #121212;
+        font: normal 14px/16px Helvetica, sans-serif;
+      }
+      input[type="text"] {
+        padding: 5px;
+        font: normal 14px/16px Helveticam sans-serif;
+        color: #555;
+      }
+    </style>
+  </head>
+ 
+  <body>
+      <h1>Form with various fields</h1>
+      <p>This form example containing text, radio, checkbox and submit input field types.</p>
+      
+      <form action="http://itp.nyu.edu/~jjo298/sinatra/missed-calls" method="GET">
+        <!-- Text input fields -->
+        <p><label>First Name </label><input type="text" name="firstname" /></p>
+        <p><label>Last Name </label><input type="text" name="lastname" /></p>
+     
+        <!-- Radio input fields -->
+        <p><label>Male </label><input type="radio" name="gender" value="male" /></p>
+        <p><label>Female </label><input type="radio" name="gender" value="female" /></p>
+     
+        <!-- Checkbox input fields -->
+        <p><label>Brown </label><input type="checkbox" name="hair" value="brown" /> </p>
+        <p><label>Black </label><input type="checkbox" name="hair" value="black" /> </p>
+        <p><label>Blond </label><input type="checkbox" name="hair" value="blond" /> </p>
+        
+        <!-- Submit input button -->
+        <p><input type="submit" value="Submit" /></p>
+      </form>
+
+  </body>
+</html>
