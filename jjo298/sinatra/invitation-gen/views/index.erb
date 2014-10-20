@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>The Invitation Generator</title>
+  	<script type="text/javascript" src="//code.jquery.com/jquery-2.1.1.min.js"></script>    
+    <style type="text/css">
+      body {
+        width: 820px;
+      }
+      h1 {
+        color: #555;
+        border-bottom: 1px solid #ccc;
+      }
+      p {
+        color: #121212;
+        font: normal 14px/16px Helvetica, sans-serif;
+      }
+      input[type="text"] {
+        padding: 5px;
+        font: normal 14px/16px Helvetica, sans-serif;
+        color: #555;
+      }
+    </style>
+  </head>
+ 
+  <body>
+      <h1>The Invitation Generator</h1>
+      <p> Generate a voice invitation, send it to people you like, or your family (or both, if they happen to co-occur). </p>
+      <form id="invitation" action="/~jjo298/sinatra/invitation-gen/sendinvite" method="POST">
+        <p><label>Please enter your name: </label> <input type="text" id="name" name="username" /></p>
+        <p><label>Please enter your phone number: </label> <input type="text" id="usernumber" name="usernumber" /></p>
+        </br>
+        <p><label>Friend / Family phone number: </label> <input type="text" id="usernumber" name="number1" /></p>
+        <p><label>Friend / Family phone number: </label> <input type="text" id="usernumber" name="number2" /></p>
+        <p><label>Friend / Family phone number: </label> <input type="text" id="usernumber" name="number3" /></p>
+        <p><label>Friend / Family phone number: </label> <input type="text" id="usernumber" name="number4" /></p>
+        <p><label>Friend / Family phone number: </label> <input type="text" id="usernumber" name="number5" /></p>
+        <input id="submitbutton" type="submit" value="Submit!" /></p>
+      </form>
+<!--       <script type="text/javascript">
+        $('#submitbutton').click(function() {
+          $.ajax({
+            url: "/~jjo298/sinatra/invitation-gen/sendinvite",
+            type: 'POST',
+            dataType: 'jsonp',
+            data: { name: $('#name').val(),
+                    usernumber: $('#usernumber').val()
+                   },
+          })
+          .done(function(data) {
+            console.log("success");
+            console.log(data);
+          })
+          .fail(function() {
+            console.log("error");
+          })
+          .always(function() {
+            console.log("complete");
+          });
+        });
+      </script> -->
+  </body>
+</html>
