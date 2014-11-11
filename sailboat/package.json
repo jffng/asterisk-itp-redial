@@ -1,0 +1,22 @@
+{
+  "name": "sailboat",
+  "version": "0.0.0",
+  "description": "web game client for racing sailboats via telephones!",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "asterisk",
+    "redial",
+    "sockets",
+    "p5"
+  ],
+  "author": "jeff ong",
+  "license": "MIT",
+  "dependencies": {
+    "box2dweb": "~2.1.0-b",
+    "jquery": "~2.1.1",
+    "p5": "~0.3.11"
+  }
+}
