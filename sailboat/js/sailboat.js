@@ -12,10 +12,13 @@ var Sailboat = function (callerid, img) {
 
 	var self = this;
 
-	this.img = loadImage(img, function(){
-		console.log("loaded: " + img);
-		self.img_loaded = true;
-	});
+	this.img = img;
+	// this.img_loaded = true;
+
+	// this.img = loadImage(img, function(){
+	// 	console.log("loaded: " + img);
+	// 	self.img_loaded = true;
+	// });
 }
 
 Sailboat.prototype.apply_force = function(mag) {
@@ -41,7 +44,20 @@ Sailboat.prototype.apply_force = function(mag) {
 };
 
 Sailboat.prototype.change_orientation = function(orientation){
-	this.orientation = orientation;
+	switch (orientation){
+		case "6":
+			this.orientation = "east";
+			break;
+		case "4":
+			this.orientation = "west";
+			break;
+		case "2":
+			this.orientation = "north";
+			break;
+		case "8":
+			this.orientation = "south";
+			break;
+	};
 };
 
 Sailboat.prototype.update = function(){
@@ -57,9 +73,15 @@ Sailboat.prototype.check_borders = function(){
 };
 
 Sailboat.prototype.display = function(scaleFactor){
-	if(this.img_loaded) {
-		image(this.img, this.position.x, this.position.y, this.img.width / scaleFactor, this.img.height / scaleFactor);
-	}
+	image(this.img, this.position.x, this.position.y, this.img.width / scaleFactor, this.img.height / scaleFactor);
+
+	var digits = this.id.toString();
+	digits = "#" + digits.slice(6,10);
+	
+	fill(0);
+	textAlign(CENTER);
+	textSize(32 / scaleFactor);
+	text(digits, this.position.x + this.img.width / scaleFactor, this.position.y + this.img.height / scaleFactor / 2);
 }
 
 
