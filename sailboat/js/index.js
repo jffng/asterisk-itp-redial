@@ -11,8 +11,46 @@ var sailboatImages = [
 	"sailboats/6.png",
 	"sailboats/7.png",
 	"sailboats/8.png" ];
+var finishLine;
 
-var imagesLoaded = false;
+var controller = new Controller();
+
+//////////////////////////////////////////////////////////////////////////
+///
+///					P5 INIT
+///
+//////////////////////////////////////////////////////////////////////////
+
+function setup () {
+	createCanvas(window.innerWidth, window.innerHeight);
+	background(88,195,237);
+
+	finishLine = loadImage("finishline.png");
+
+	for(var i = 0; i < sailboatImages.length; i++){
+		sailboatImages[i] = loadImage(sailboatImages[i]);
+	}
+
+}
+
+function draw () {
+	background(88,195,237);
+
+	imageMode(CENTER);
+	image(finishLine, width * .95, height / 2, finishLine.width / 2, finishLine.height * 1.5);
+
+	controller.update(sailboats);
+
+	for(var s in sailboats){
+		var dragForce = calculateDrag(sailboats[s]);
+
+		sailboats[s].separate(sailboats);
+		sailboats[s].apply_force(dragForce);
+		sailboats[s].check_borders();
+		sailboats[s].update();
+		sailboats[s].display(3);
+	}
+}
 
 //////////////////////////////////////////////////////////////////////////
 ///
@@ -46,7 +84,7 @@ tinyphone.on('audio_level', function(caller){
 	// console.log("received audio level '"+caller.audioLevel+"' from "+caller.callerNumber);
 
 	for(var i = 0; i < sailboats.length; i++){
-		if(caller.callerNumber == sailboats[i].id) sailboats[i].apply_force(caller.audioLevel);
+		if(caller.callerNumber == sailboats[i].id) sailboats[i].apply_force(caller.audioLevel / 5);
 	}
 });
 
@@ -58,42 +96,16 @@ tinyphone.on('hangup', function(caller){
 
 //////////////////////////////////////////////////////////////////////////
 ///
-///					P5 INIT
-///
-//////////////////////////////////////////////////////////////////////////
-
-function setup () {
-	createCanvas(window.innerWidth, window.innerHeight);
-	background(88,195,237);
-
-	for(var i = 0; i < sailboatImages.length; i++){
-		sailboatImages[i] = loadImage(sailboatImages[i]);
-	}
-}
-
-function draw () {
-	background(88,195,237);
-
-	for(var s in sailboats){
-		var dragForce = calculateDrag(sailboats[s]);
-
-		sailboats[s].apply_force(dragForce);
-		sailboats[s].check_borders();
-		sailboats[s].update();
-		sailboats[s].display(3);
-	}
-}
-
-//////////////////////////////////////////////////////////////////////////
-///
 ///					TEST FUNCTIONS
 ///
 //////////////////////////////////////////////////////////////////////////
 
 // function mousePressed(){
-// 	for(var s in sailboats){
-// 		sailboats[s].apply_force(.5);
-// 	}
+// 	sailboats.push(new Sailboat('test12349234', sailboatImages[0]));
+
+// 	// for(var s in sailboats){
+// 	// 	sailboats[s].apply_force(.5);
+// 	// }
 // }
 
 // function keyPressed(){
@@ -105,7 +117,9 @@ function draw () {
 // 			sailboats[0].change_orientation("south");
 // 			break;
 // 		case RIGHT_ARROW:
-// 			sailboats[0].change_orientation("east");
+// 			for(var s in sailboats){
+// 				sailboats[s].apply_force(.25);
+// 			}
 // 			break;
 // 		case LEFT_ARROW:
 // 			sailboats[0].change_orientation("west");
