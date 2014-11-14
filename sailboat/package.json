@@ -15,8 +15,6 @@
   "author": "jeff ong",
   "license": "MIT",
   "dependencies": {
-    "box2dweb": "~2.1.0-b",
-    "jquery": "~2.1.1",
     "p5": "~0.3.11"
   }
 }

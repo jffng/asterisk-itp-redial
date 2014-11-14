@@ -4,7 +4,7 @@ var Sailboat = function (callerid, img) {
 	this.orientation = "east";
 	this.mass = 1;
 
-	this.position = createVector(5, Math.random()*height);
+	this.position = createVector(5, Math.random()*height*.95);
 	this.velocity = createVector(0, 0);
 	this.acceleration = createVector(0, 0);
 	this.maxspeed = 5;    // Maximum speed

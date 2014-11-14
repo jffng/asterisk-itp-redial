@@ -6,10 +6,6 @@ require 'dm-core'
 require 'dm-types/yaml'
 require 'fileutils'
 
-vars = ARGV[3] || ""
-#future time
-touchtime = ARGV[4] || ""
-
 def validate_caller_id(call_id)
 	first_digit = call_id.split('')[0];
 	#check to see if we need to add a 1
@@ -34,19 +30,17 @@ def gen_call_file(number, context, extension)
 	file.puts("WaitTime: 30\n")
 	file.puts("Context: " + context + "\n")
 	file.puts("Extension: " + extension + "\n")
-	file.puts("Set: " + vars + "\n") unless vars == ""
+	# # file.puts("Set: " + vars + "\n") unless vars == ""
 	file.close
-	#change file permission
+	# #change file permission
 	File.chmod(0777, startcallfile)
 	FileUtils.chown(ENV['USER'],'asterisk',startcallfile)
-	#hour-minute-second-month-day-year (example: 02-10-00-09-27-2007)
-	if (touchtime != "")
-		timesplit = touchtime.split('-')
-		ctime = Time.local(timesplit[5],timesplit[3],timesplit[4],timesplit[0],timesplit[1],timesplit[2])
-		File.utime(ctime,ctime,startcallfile) #change file time to future date
-	end 
+	# #hour-minute-second-month-day-year (example: 02-10-00-09-27-2007)
+	# timesplit = touchtime.split('-')
+	# ctime = Time.local(timesplit[5],timesplit[3],timesplit[4],timesplit[0],timesplit[1],timesplit[2])
+	# File.utime(ctime,ctime,startcallfile) #change file time to future date
 
-	#move file to /var/spool/asterisk/outgoing
+	# #move file to /var/spool/asterisk/outgoing
 	FileUtils.mv(startcallfile,endcallfile)
 end
 
@@ -65,6 +59,7 @@ class Invitation
 	property :uid, 				Integer, :required => true
 	property :username,			String, :required => true
 	property :usernumber, 		String, :required => true
+	property :name_audio,		String
 
 	has n,	 :numbers
 end
@@ -87,9 +82,9 @@ get '/' do
 end
 
 post '/sendinvite' do
-	uid = rand(1000)
+	uid = rand(9999)
 
-	new_invite = Invitation.create(:uid => uid, :username => params[:username], :usernumber => params[:usernumber])
+	new_invite = Invitation.create(:uid => uid, :username => params[:username], :usernumber => params[:usernumber], :name_audio => nil)
 
 	for i in 1..5
 		current_symbol = ("number" + "#{i}").to_sym
@@ -99,10 +94,13 @@ post '/sendinvite' do
 
 	new_invite.save
 
-	"dial 917-123-1238 ext 20, your pin is: #{uid}"
+	callfile_num = validate_caller_id(params[:usernumber])
+
+	gen_call_file(callfile_num, 'jjo298', 's')
+
+	"IMPORTANT -- Your pin is: #{uid}, number calling is #{callfile_num}"
 	# #{params[:username]}, #{params[:usernumber]}, #{params[:number1]},
 	# #{params[:number2]},#{params[:number3]},#{params[:number4]},
 	# #{params[:number5]}"
 	 
-	gen_call_file(params[:usernumber], 'jjo298', 's')
 end

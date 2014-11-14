@@ -53,12 +53,15 @@ Controller.prototype.update = function(players){
 	fill(10);
 	textFont("Courier New");
 	textAlign(CENTER);
-	textSize(72);
-	var welcomeString = "206-203-7127 to join";
 
 	if(this.game_started) 	this.start_game(players);
-	else 					text(welcomeString, width / 2, height / 2);	
-
+	else {
+			textSize(72);
+			text("206-203-7127 to join", width / 2, height / 2);
+			textSize(24);
+			text("Blow in the speaker for wind!", width / 2, height / 2 + 40);
+			text("Change directions by pressing: 2, 4, 6, or 8.", width / 2, height / 2 + 80);
+	}
 	for(var i = 0; i < players.length; i++){
 		if(players[i].position.x > width * .95){
 			var digits = players[i].id.toString();
@@ -76,13 +79,3 @@ Controller.prototype.update = function(players){
 		}
 	}
 }
-
-//////////////////////////////////////////////////////////////////////////
-///
-///					AUDIO 
-///
-//////////////////////////////////////////////////////////////////////////
-
-
-
-
