@@ -1,10 +1,10 @@
 #!/usr/bin/env ruby
 
-# require 'data_mapper'
+require 'data_mapper'
 require 'ruby-agi'
 require 'socket'
 require 'uri'
-# require_relative 'model.rb'
+require_relative 'model.rb'
 
 agi = AGI.new
 @uniqueid = agi.uniqueid
@@ -50,28 +50,33 @@ sleep(1)
 
 looping = true
 while looping
-
 	Emojiphrase.first(:has_recording=>false) ? emojiphrase = Emojiphrase.first(:has_recording=>false) : emojiphrase = Emojiphrase.first(:has_recording=>true)
 
-    result = agi.wait_for_digit(-1) # wait forever
-	
+	@sock.puts "id:#{@uniqueid},event:emojiphrase,emoji:#{emojiphrase.emoji},phrase:#{emojiphrase.phrase}"
+
+	agi.stream_file("vm-extension") # "press 1 to begin a recording, and any key to end"
+
+	result = agi.wait_for_digit(-1) # wait forever
+
 	if result.digit
-		@sock.puts "id:#{@uniqueid},event:keypress,value:#{result.digit}"
-		agi.stream_file("vm-extension") # "press 1 to begin recording, and any key to end"
-	
-		result = agi.wait_for_digit(-1)
-	
-		if result.digit == 1
-			record_file = "/root/emotiphrase/recordings/" + emojiphrase.emoji + '_' + emojiphrase.phrase + "#{@uniqid}"
-        	agi.record_file(record_file, "WAV", "0123456789#*", 10000, true)
+		@sock.puts "id:#{@uniqueid},event:keypress,value:#{result.digit}"	    	
 
-        	rec = Recording.create( { :id=>1, :file_path=>record_file }, { :file_path=>record_file })
+		if result.digit == '1'
+			relative_path = emojiphrase.emoji.tr("\ ", '').tr('.','').tr('\'','').tr('?','') + emojiphrase.phrase.tr("\ ", '').tr('.','').tr('\'','').tr('?','') + "#{@uniqueid}".tr('.','')
+			# @sock.puts "id:#{@uniqueid},event:keypress,value:#{relative_path}"	    	
 
-        	emojiphrase.recordings << rec
-        	emojiphrase.has_recording = true
+			record_file = "/root/emotiphone/recordings/" + relative_path
+			agi.record_file(record_file, "WAV", "0123456789#*", 10000, true)
+
+			rec = Recording.first_or_create( { :id=>1, :file_path=>record_file }, { :file_path=>record_file })
+
+			emojiphrase.recordings << rec
+			emojiphrase.has_recording = true
+			emojiphrase.save
+		end
 	else #hangup broke the pending AGI request
-        looping = false 
-    end
+		looping = false 
+	end
 end
 send_hangup(0)
 

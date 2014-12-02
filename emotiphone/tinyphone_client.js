@@ -98,6 +98,18 @@ socket.on('keypress', function(msg){
 		callback(caller);
 	}
 });
+socket.on('emojiphrase', function(msg){ 
+	//console.log('received keypress '+keypress+' from '+caller.callerNumber);
+	var callback = tinyphone.callback['emojiphrase'];
+	if (callback){
+		var caller = tinyphone.callers[msg.id];
+		var phrase = msg.phrase;
+		var emoji = msg.emoji
+		caller.phrase = phrase;
+		caller.emoji = emoji;
+		callback(caller);
+	}
+});
 socket.on('audio_level', function(msg){ 
 	var callback = tinyphone.callback['audio_level'];
 	if (callback){

@@ -5,7 +5,7 @@ DataMapper.setup(:default, {
 	:host => 'localhost',
 	:username => 'root',
 	:password => '',
-	:database => 'emoji_test'
+	:database => 'emojiphrase'
 })
 
 class Recording

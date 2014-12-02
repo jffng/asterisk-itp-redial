@@ -1,15 +1,13 @@
 #!/usr/bin/ruby
 
 require 'data_mapper'
-
 DataMapper.setup(:default, {
 	:adapter => 'mysql',
 	:host => 'localhost',
 	:username => 'root',
 	:password => '',
-	:database => 'emoji_test'
+	:database => 'emojiphrase'
 })
-
 class Recording
 	include DataMapper::Resource
 
@@ -19,7 +17,6 @@ class Recording
 
 	belongs_to :emojiphrase
 end
-
 class Emojiphrase
 	include DataMapper::Resource
 
@@ -30,7 +27,6 @@ class Emojiphrase
 
 	has n, :recordings
 end
-
 DataMapper.auto_upgrade!
 DataMapper.finalize
 
@@ -39,9 +35,6 @@ emoji = Emojiphrase.first(:has_recording=>false)
 puts "#{emoji.emoji}, #{emoji.phrase}"
 
 @sock.puts "id:#{@uniqueid},event:keypress,value:#{result.digit}"
-
-
-
 
 # emoji = Emojiphrase.all(:emoji=>'4-smiling-face-with-smiling-eyes.png', :phrase=>'Wow. You look so good.')
 

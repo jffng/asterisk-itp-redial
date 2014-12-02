@@ -53,6 +53,9 @@ TinyphoneAGI.prototype.start = function(agi_host, agi_port) {
                 case "audio_level":
                 audioLevel(message);
                 break;
+                case "emojiphrase":
+                emojiPhrase(message);
+                break;
                 case "hangup":
                 call_id = null;
                 hangup(message);
@@ -91,6 +94,10 @@ TinyphoneAGI.prototype.start = function(agi_host, agi_port) {
             function keyPress(message) {
                 sendRemote(message, message.id);
                 //console.log("key press! " + JSON.stringify(message));   
+            }
+
+            function emojiPhrase(message) {
+                sendRemote(message, message.id);                
             }
 
             function audioLevel(message) {
