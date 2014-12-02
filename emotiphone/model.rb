@@ -1,5 +1,3 @@
-#!/usr/bin/ruby
-
 require 'data_mapper'
 
 DataMapper.setup(:default, {
@@ -26,18 +24,10 @@ class Emojiphrase
 	property :id, Serial
 	property :phrase, String, :required => true
 	property :emoji, String, :required => true
+	property :has_recording, Boolean, :required => true
 
 	has n, :recordings
 end
 
 DataMapper.auto_upgrade!
 DataMapper.finalize
-
-File.open('phrases.txt') do |file_handle|
-	file_handle.each_line do |line|
-		Dir.foreach('emojis') do |fname|
-			next if fname == '.' or fname == '..'
-			emojiphrase = Emojiphrase.first_or_create( { :phrase => line.tr("\n", '', :emoji => fname } )
-		end
-	end
-end

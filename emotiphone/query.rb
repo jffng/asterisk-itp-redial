@@ -10,26 +10,6 @@ DataMapper.setup(:default, {
 	:database => 'emoji_test'
 })
 
-# class Emoji
-# 	include DataMapper::Resource
-
-# 	property :id, Serial
-# 	property :name, String, :required => true
-
-# 	has n, :emojiphrases
-# 	has n, :phrases, :through => :emojiphrases 
-# end
-
-# class Phrase
-# 	include DataMapper::Resource
-
-# 	property :id, Serial
-# 	property :phrase, String, :required => true
-
-# 	has n, :emojiphrases
-# 	has n, :emojis, :through => :emojiphrases
-# end
-
 class Recording
 	include DataMapper::Resource
 
@@ -38,14 +18,6 @@ class Recording
 	property :rating, Integer
 
 	belongs_to :emojiphrase
-
-	# def self.find_all
-	# 	all()
-	# end
-
-	# def self.highest_rated
-	# 	all(:rating.gt => 4)
-	# end
 end
 
 class Emojiphrase
@@ -54,8 +26,7 @@ class Emojiphrase
 	property :id, Serial
 	property :phrase, String, :required => true
 	property :emoji, String, :required => true
-	# belongs_to :phrase, :key => true
-	# belongs_to :emoji, :key => true
+	property :has_recording, Boolean, :required => true
 
 	has n, :recordings
 end
@@ -63,15 +34,19 @@ end
 DataMapper.auto_upgrade!
 DataMapper.finalize
 
-random_path = rand()
+emoji = Emojiphrase.first(:has_recording=>false)
 
-emoji = Emojiphrase.all(:emoji=>'4-smiling-face-with-smiling-eyes.png')
+puts "#{emoji.emoji}, #{emoji.phrase}"
+
+@sock.puts "id:#{@uniqueid},event:keypress,value:#{result.digit}"
+
+
+
+
+# emoji = Emojiphrase.all(:emoji=>'4-smiling-face-with-smiling-eyes.png', :phrase=>'Wow. You look so good.')
 
 # rec = Recording.create({ :file_path => '/some/random/path/#{random_path}' })
 
-for e in emoji
-	# e.recordings << rec
-	puts e.recordings
-end
-
-# emoji.recordings << rec
+# for e in emoji
+# 	# e.recordings << rec
+# end
