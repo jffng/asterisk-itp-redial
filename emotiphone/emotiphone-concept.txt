@@ -1,0 +1,13 @@
+EMOJIPHONE
+
+PROBLEM: Text messages and now emojis are not perfect proxies for our emotions. E.g. this ( ;-) ) could mean something very different to me than it does to you. 
+
+“INSIGHT”: The tone / emotional quality of a real voice is difficult to fake. Humans are quite good at noticing the subtleties and nuances of emotion in speech. 
+
+QUESTION: Where our communication aids fall short, could we train computers to figure do the expressing for us?
+
+PROJECT: Introducing EMOJIPHONE, a two-part project that gives people a new kind of vocabulary — combining the expressiveness of emojis with the power of voice.
+
+PT I: A phone & web-based interface for matching expressions with
+
+PT II: A chatroom where users can express themselves using pre-recorded phrases according to the emoji it’s associated with.

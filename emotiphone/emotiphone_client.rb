@@ -43,36 +43,68 @@ ARGV.each do |arg|
 end
 @sock.puts "id:#{@uniqueid},event:new_call,value:#{callerid}|#{agi.dnid}#{argsValue}"
 
-agi.stream_file("vm-extension")
+sleep(1)
+agi.stream_file("/root/emotiphone/sounds/welcome") # welcome to the emotiphone recording system
 sleep(1)
 
 # start agi keypress loop
 
 looping = true
 while looping
-	Emojiphrase.first(:has_recording=>false) ? emojiphrase = Emojiphrase.first(:has_recording=>false) : emojiphrase = Emojiphrase.first(:has_recording=>true)
+	Emojiphrase.all(:has_recording=>false) ? phrase_set = Emojiphrase.all(:has_recording=>false) : phrase_set = Emojiphrase.all(:has_recording=>true)
+
+	emojiphrase = phrase_set[rand(phrase_set.length)]
 
 	@sock.puts "id:#{@uniqueid},event:emojiphrase,emoji:#{emojiphrase.emoji},phrase:#{emojiphrase.phrase}"
 
-	agi.stream_file("vm-extension") # "press 1 to begin a recording, and any key to end"
+	# agi.background("/root/emotiphone/sounds/begin_recording") # "press 1 to begin a recording, and any key to end"
 
-	result = agi.wait_for_digit(-1) # wait forever
+	result = agi.wait_for_digits("/root/emotiphone/sounds/begin_recording", -1, 1) # wait forever
 
-	if result.digit
-		@sock.puts "id:#{@uniqueid},event:keypress,value:#{result.digit}"	    	
+	if result.digits
+		@sock.puts "id:#{@uniqueid},event:keypress,value:#{result.digits}"
 
-		if result.digit == '1'
+		if result.digits == '1'
+
+			agi.noop("inside second if")
+
 			relative_path = emojiphrase.emoji.tr("\ ", '').tr('.','').tr('\'','').tr('?','') + emojiphrase.phrase.tr("\ ", '').tr('.','').tr('\'','').tr('?','') + "#{@uniqueid}".tr('.','')
 			# @sock.puts "id:#{@uniqueid},event:keypress,value:#{relative_path}"	    	
 
 			record_file = "/root/emotiphone/recordings/" + relative_path
 			agi.record_file(record_file, "WAV", "0123456789#*", 10000, true)
 
-			rec = Recording.first_or_create( { :id=>1, :file_path=>record_file }, { :file_path=>record_file })
+			# agi.stream_file('/root/emotiphone/sounds/save_or_discard')
 
-			emojiphrase.recordings << rec
-			emojiphrase.has_recording = true
-			emojiphrase.save
+			# confirm = agi.wait_for_digit(-1)
+			confirming = true
+
+			while confirming
+				cmd = "sox #{record_file}.WAV /root/emotiphone/recordings/tmp.WAV silence 1 0.1 1%"
+				move = "mv /root/emotiphone/recordings/tmp.WAV #{record_file}.WAV"
+				system( cmd )
+				system( move )					
+				
+				confirm = agi.wait_for_digits("/root/emotiphone/sounds/save_playback_discard", -1, 1) # wait forever
+
+				if confirm.digits == '1'
+					rec = Recording.first_or_create( { :id=>1, :file_path=>record_file }, { :file_path=>record_file })
+
+					emojiphrase.recordings << rec
+					emojiphrase.has_recording = true
+					emojiphrase.save				
+
+					agi.stream_file('/root/emotiphone/sounds/recording_saved')
+
+					confirming = false
+				elsif confirm.digits == '2'
+					agi.stream_file(record_file)
+				else
+					confirming = false
+
+					agi.stream_file('/root/emotiphone/sounds/recording_discarded')
+				end
+			end
 		end
 	else #hangup broke the pending AGI request
 		looping = false 

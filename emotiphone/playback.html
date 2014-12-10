@@ -1,0 +1,95 @@
+<html>
+<head>
+	<style type="text/css">
+		body{
+			margin-top:10%;
+			text-align: center;
+			font-family: monospace;
+			font-size: 32px;
+		}	
+		#emoji img{
+			display: block;
+			margin: auto;
+		}
+	</style>
+	<script type="text/javascript" src="//code.jquery.com/jquery-2.1.1.min.js"></script>
+</head>
+<body>
+	<script type="text/javascript" src="tinyphone_client.js"></script>
+		<div id="emoji"></div>
+		<div id="phrase"></div>
+	</div>
+	<script>
+	// $.ajax({
+	// 	url: "http://jffng.com/emotiphone/emojis/",
+	// 	success: function(data){
+	// 	$(data).find("td > a").each(function(){
+	// 		// will loop through 
+	// 		alert("Found a file: " + $(this).attr("href"));
+	// 	});
+	// 	}
+	// });	
+
+	function createCORSRequest(method, url){
+		var xhr = new XMLHttpRequest();
+		if ("withCredentials" in xhr){
+			xhr.open(method, url, true);
+		} else if (typeof XDomainRequest != "undefined"){
+		xhr = new XDomainRequest();
+			xhr.open(method, url);
+		} else {
+			xhr = null;
+		}
+		return xhr;
+	}
+
+	var request = createCORSRequest("get", "http://jffng.com/");
+	if (request){
+	    request.onload = function() {
+	        // ...
+	    };
+	    // request.onreadystatechange = handler;
+	    request.send();
+	}
+
+	// loadSong("sailing-theme-8bit.mp3");
+	// var context = new AudioContext();
+	// var phrase;
+
+	// function loadSong(url) {
+	// 	var request = new XMLHttpRequest();
+	// 	request.open('GET', url, true);
+	// 	request.responseType = 'arraybuffer';
+
+	// 	// Decode asynchronously
+	// 	request.onload = function() {
+	// 			context.decodeAudioData(request.response, function(buffer) {
+	// 			song = buffer;
+	// 		});
+	// 	}
+	// 	request.send();
+	// }
+
+	// function playSound(buffer) {
+	// 	var source = context.createBufferSource(); // creates a sound source
+	// 	source.buffer = buffer;                    // tell the source which sound to play
+	// 	source.connect(context.destination);       // connect the source to the context's destination (the speakers)
+	// 	source.start(0);                           // play the source now
+	// 	                                         // note: on older systems, may have to use deprecated noteOn(time);
+	// }
+
+	// var emotiphrase = {};
+
+
+	// tinyphone.on('emojiphrase', function(caller){
+	// 	document.getElementById('emoji').innerHTML = '<img src=emojis/' + caller.emoji + '></>';
+	// 	document.getElementById('phrase').innerText = caller.phrase;
+	// 	// document.write("received emojiphrase:" + caller.emoji+": " + caller.phrase+cr );
+	// 	console.log(caller);
+	// });
+	// tinyphone.on('hangup', function(caller){
+	// 	// document.write("caller "+caller.callerNumber+"( id "+caller.id+") hung up"+cr);
+	// });
+	</script>
+</body>
+</html>
