@@ -38,7 +38,8 @@
 		console.log(caller);
 	});
 	tinyphone.on('hangup', function(caller){
-		// document.write("caller "+caller.callerNumber+"( id "+caller.id+") hung up"+cr);
+		document.getElementById('emoji').innerHTML = 'Dial 206-424-8741';
+		document.getElementById('phrase').innerText = '';
 	});
 	</script>
 </body>
